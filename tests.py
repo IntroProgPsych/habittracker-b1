@@ -1,14 +1,23 @@
-#import all needed modules here
 import unittest
+from app import interpret_score
 
-#write all your tests below this line
-
-
-#write your test suite here, in the main() function
-def main():
-    #call all your tets here, one on each line
-    print("Starting tests suite...")
+class TestHabitTracker(unittest.TestCase):
     
-#please do not change the lines below
-if __name__ == "__main__":
-    main()
+    def test_interpret_low(self):
+        """Test that scores less than 6 return 'Low'"""
+        self.assertEqual(interpret_score(0), "Low")
+        self.assertEqual(interpret_score(5), "Low")
+
+    def test_interpret_moderate(self):
+        """Test that scores between 6 and 11 return 'Moderate'"""
+        self.assertEqual(interpret_score(6), "Moderate")  # Boundary check
+        self.assertEqual(interpret_score(8), "Moderate")
+        self.assertEqual(interpret_score(11), "Moderate") # Boundary check
+
+    def test_interpret_high(self):
+        """Test that scores 12 or higher return 'High'"""
+        self.assertEqual(interpret_score(12), "High")     # Boundary check
+        self.assertEqual(interpret_score(21), "High")     # Max possible score (3 questions * 7 days)
+
+if __name__ == '__main__':
+    unittest.main()
