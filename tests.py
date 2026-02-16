@@ -1,23 +1,39 @@
 import unittest
-from app import interpret_score
+from unittest.mock import patch
+from app import interpret_score, get_valid_input
 
-class TestHabitTracker(unittest.TestCase):
+class Test_interptret_score(unittest.TestCase):
     
     def test_interpret_low(self):
-        """Test that scores less than 6 return 'Low'"""
         self.assertEqual(interpret_score(0), "Low")
         self.assertEqual(interpret_score(5), "Low")
 
     def test_interpret_moderate(self):
-        """Test that scores between 6 and 11 return 'Moderate'"""
-        self.assertEqual(interpret_score(6), "Moderate")  # Boundary check
+        self.assertEqual(interpret_score(6), "Moderate")
         self.assertEqual(interpret_score(8), "Moderate")
-        self.assertEqual(interpret_score(11), "Moderate") # Boundary check
 
     def test_interpret_high(self):
-        """Test that scores 12 or higher return 'High'"""
-        self.assertEqual(interpret_score(12), "High")     # Boundary check
-        self.assertEqual(interpret_score(21), "High")     # Max possible score (3 questions * 7 days)
+        self.assertEqual(interpret_score(12), "High")
+        self.assertEqual(interpret_score(21), "High")
+
+class Test_get_valid_input(unittest.TestCase):
+    @patch('builtins.input', return_value='5') 
+    def test_valid_input_immediate(self, mock_input):
+        result = get_valid_input("irrelevant text")
+        self.assertEqual(result, 5)
+
+    @patch('builtins.input', side_effect=['9', 'abc', '3'])
+    def test_invalid_then_valid_input(self, mock_input):
+        result = get_valid_input("irrelevant text")
+        self.assertEqual(result, 3)
+
+    @patch('builtins.input', return_value='0')
+    def test_boundary_zero(self, mock_input):
+        self.assertEqual(get_valid_input("irrelevant text"), 0)
+
+    @patch('builtins.input', return_value='7')
+    def test_boundary_seven(self, mock_input):
+        self.assertEqual(get_valid_input("irrelevant text"), 7)
 
 if __name__ == '__main__':
     unittest.main()

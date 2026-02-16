@@ -7,7 +7,6 @@ def interpret_score(total_score):
     elif 6 <= total_score <= 11:
         return "Moderate"
     else:
-        # Score is less than 6
         return "Low"
 
 def get_valid_input(question_text):
@@ -56,6 +55,7 @@ def get_questions():
 def run_tracker():
 
     print("--- Healthy Habit Tracker ---")
+    user_name = input("State your name:\n")
     print("Answer the following questions with the number of days per week (0-7).\n")
 
     questions = get_questions()
@@ -79,13 +79,13 @@ def run_tracker():
         interpretation = interpret_score(total)
         output_text += f"{category}: Score {total} → {interpretation}\n"
     print(output_text)
-    log(output_text)
+    log(user_name,output_text)
 
-def log(output_text):
+def log(name,output_text):
     from datetime import datetime
     now = datetime.now()
     time_string = now.strftime("%Y-%m-%d %H:%M:%S")
-    with open(f"logs/{time_string}.log", 'w', encoding='utf-8') as outfile:
+    with open(f"logs/{name}-{time_string}.log", 'w', encoding='utf-8') as outfile:
         outfile.write(output_text)
         
 if __name__ == "__main__":
