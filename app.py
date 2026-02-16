@@ -74,10 +74,19 @@ def run_tracker():
     print("\n--- Habit Adherence Results ---")
     
     # Output results
+    output_text = ""
     for category, total in scores.items():
         interpretation = interpret_score(total)
-        print(f"{category}: Score {total} → {interpretation}")
+        output_text += f"{category}: Score {total} → {interpretation}\n"
+    print(output_text)
+    log(output_text)
 
+def log(output_text):
+    from datetime import datetime
+    now = datetime.now()
+    time_string = now.strftime("%Y-%m-%d %H:%M:%S")
+    with open(f"logs/{time_string}.log", 'w', encoding='utf-8') as outfile:
+        outfile.write(output_text)
+        
 if __name__ == "__main__":
-
     run_tracker()
