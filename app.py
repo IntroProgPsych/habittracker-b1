@@ -15,7 +15,6 @@ def get_valid_input(question_text):
         try:
             user_input = input(f"{question_text} ")
             value = int(user_input)
-            
             if 0 <= value <= 7:
                 return value
             else:
@@ -60,9 +59,10 @@ def run_tracker():
 
     questions = get_questions()
     
-    # Initialize scores dictionary dynamically based on categories found in questions
     categories = set(q['habit'] for q in questions)
-    scores = {category: 0 for category in categories}
+    scores = {}
+    for category in categories:
+        scores[category] = 0
 
     # Administer the quiz
     for item in questions:
