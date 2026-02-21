@@ -21,6 +21,8 @@ def get_valid_input(question_text):
                 print("Error: Please enter a number between 0 and 7.")
         except ValueError:
             print("Error: Invalid input. Please enter a whole number.")
+        finally:
+            print ("------------")
 
 def get_questions():
 
@@ -52,35 +54,34 @@ def get_questions():
     ]
 
 def run_tracker():
-
+    # start
     print("--- Healthy Habit Tracker ---")
     user_name = input("State your name:\n")
     print("Answer the following questions with the number of days per week (0-7).\n")
 
     questions = get_questions()
-    
+    # uniquely filtering categories, initializing scores
     categories = set(q['habit'] for q in questions)
     scores = {}
     for category in categories:
         scores[category] = 0
-
-    # Administer the quiz
+    # validating and adding question score to habbit sum
     for item in questions:
-        # Pass the question text to the input handler
         days = get_valid_input(item['text'])
-        # Add the valid response to the corresponding category score
         scores[item['habit']] += days
 
     print("\n--- Habit Adherence Results ---")
     
-    # Output results
     output_text = ""
+    # looping through the index and the value of the dictionaries got through .items()
+    # concating output
     for category, total in scores.items():
         interpretation = interpret_score(total)
         output_text += f"{category}: Score {total} → {interpretation}\n"
     print(output_text)
     log(user_name,output_text)
 
+# saving the data into a log file
 def log(name,output_text):
     from datetime import datetime
     now = datetime.now()
